@@ -27,15 +27,31 @@ All source changes are in `patches/` (one per repo/submodule, including the ExoP
 Requirements: JDK 8, Android SDK (`platforms;android-28`, `build-tools;28.0.3`), network access to
 `dl.google.com`, `maven.google.com`, `jitpack.io`, Maven Central and `services.gradle.org`.
 
+From this fork (the main-repo fixes are already merged, so only the submodule patches are needed):
+
 ```bash
-git clone --recurse-submodules https://github.com/yuliskov/SmartTubeLegacy.git && cd SmartTubeLegacy
-git apply patches/SmartTubeLegacy.patch
+git clone --recurse-submodules https://github.com/ferrierotony-cmyk/SmartTubeLegacy.git && cd SmartTubeLegacy
 git -C SharedModules apply ../patches/SharedModules.patch
 git -C MediaServiceCore apply ../patches/MediaServiceCore.patch
 git -C MediaServiceCore/SharedModules apply ../../patches/MediaServiceCore-SharedModules.patch
-# copy ./localrepo from this tree, or rebuild it from exoplayer-amazon-port amazon/r2.10.6 + patches/exo-amazon-r2.10.6.patch
 echo "sdk.dir=$ANDROID_HOME" > local.properties
 JAVA_HOME=/path/to/jdk8 bash ./gradlew :smartyoutubetv:assembleOrigDebug
 ```
 
+From yuliskov's original repo instead, also run `git apply patches/SmartTubeLegacy.patch` (after copying `patches/`
+and `localrepo/` over from this fork) before the submodule patches.
+
 Install: `adb install SYTV_Orig_v6.17.739_d.apk`
+
+## Test results (2026-11-19)
+
+| Test | Result |
+|---|---|
+| Fresh clone of this fork + the steps above | **Pass.** APK builds. |
+| Unit tests (`testOrigDebugUnitTest`, `sharedutils`, `common`, `youtubeapi`) | **Fail, all suites.** Every test dies inside Robolectric 4.3.1's own setup (`Configuration.getLocales not mocked`) before any test code runs, including in modules these fixes barely touch. That's the old test harness, not the app. Many tests also hit live 2021-era YouTube APIs. |
+| Install + launch on an Android 7.1 x86 emulator | **Pass.** Installs, launches into "1080 Main" (WebView) mode, shows the first-run consent dialog, accepts D-pad (TV remote) input, no crashes. |
+| Actual YouTube playback | **Not tested.** The test emulator had no internet access. Unverified on real hardware. |
+
+Side note from testing: with no network, the app reloads the page roughly 4 times a second, forever
+(`ControllerEventListener: onReceiveError called: reloading tab...`). That's original behavior, not something these fixes introduced.
+
