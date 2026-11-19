@@ -1,0 +1,352 @@
+diff --git a/MediaServiceCore b/MediaServiceCore
+--- a/MediaServiceCore
++++ b/MediaServiceCore
+@@ -1 +1 @@
+-Subproject commit 05f4a8f955ad428a6b0fc5b1410f16534811c6cf
++Subproject commit 05f4a8f955ad428a6b0fc5b1410f16534811c6cf-dirty
+diff --git a/SharedModules b/SharedModules
+--- a/SharedModules
++++ b/SharedModules
+@@ -1 +1 @@
+-Subproject commit 7ec5d97e98831639b1412cdc992ec9168afd29b3
++Subproject commit 7ec5d97e98831639b1412cdc992ec9168afd29b3-dirty
+diff --git a/browser/build.gradle b/browser/build.gradle
+index b8b9adfb..87085432 100644
+--- a/browser/build.gradle
++++ b/browser/build.gradle
+@@ -36,6 +36,12 @@ android {
+     // more: https://proandroiddev.com/advanced-android-flavors-part-4-a-new-version-fc2ad80c01bb
+     flavorDimensions "default"
+ 
++    sourceSets {
++        main {
++            java.srcDirs += 'src/xwalkStub/java'
++        }
++    }
++
+     productFlavors {
+         lite {}
+         full {}
+@@ -69,8 +75,9 @@ dependencies {
+     implementation project(path: ':appupdatechecker')
+ 
+     // https://download.01.org/crosswalk/releases/crosswalk/android/stable/latest/
+-    liteApi 'org.xwalk:xwalk_shared_library:' + xwalkSharedLibraryVersion
+-    fullApi 'org.xwalk:xwalk_core_library:' + xwalkCoreLibraryVersion
++    // Crosswalk artifacts are gone from the internet; compiled against no-op stubs in src/xwalkStub instead
++    // liteApi 'org.xwalk:xwalk_shared_library:' + xwalkSharedLibraryVersion
++    // fullApi 'org.xwalk:xwalk_core_library:' + xwalkCoreLibraryVersion
+ 
+     //liteApi project(':xwalk_shared_library-23.53.589.4')
+     //fullApi project(':xwalk_core_library-23.53.589.4-arm')
+diff --git a/browser/src/main/java/org/xwalk/core/MyXWalkDialogManager.java b/browser/src/main/java/org/xwalk/core/MyXWalkDialogManager.java.disabled
+similarity index 100%
+rename from browser/src/main/java/org/xwalk/core/MyXWalkDialogManager.java
+rename to browser/src/main/java/org/xwalk/core/MyXWalkDialogManager.java.disabled
+diff --git a/browser/src/main/java/org/xwalk/core/MyXWalkLibraryLoader.java b/browser/src/main/java/org/xwalk/core/MyXWalkLibraryLoader.java.disabled
+similarity index 100%
+rename from browser/src/main/java/org/xwalk/core/MyXWalkLibraryLoader.java
+rename to browser/src/main/java/org/xwalk/core/MyXWalkLibraryLoader.java.disabled
+diff --git a/browser/src/main/java/org/xwalk/core/MyXWalkUpdater.java b/browser/src/main/java/org/xwalk/core/MyXWalkUpdater.java.disabled
+similarity index 100%
+rename from browser/src/main/java/org/xwalk/core/MyXWalkUpdater.java
+rename to browser/src/main/java/org/xwalk/core/MyXWalkUpdater.java.disabled
+diff --git a/browser/src/xwalkStub/java/org/xwalk/core/JavascriptInterface.java b/browser/src/xwalkStub/java/org/xwalk/core/JavascriptInterface.java
+new file mode 100644
+index 00000000..dfc5733c
+--- /dev/null
++++ b/browser/src/xwalkStub/java/org/xwalk/core/JavascriptInterface.java
+@@ -0,0 +1,7 @@
++// STUB: Crosswalk 23.53.589.4 artifacts are no longer downloadable (download.01.org is gone).
++// No-op replacement so the project compiles. XWalk ("Alt") engine modes do NOT work in this build.
++package org.xwalk.core;
++
++import java.lang.annotation.*;
++@Retention(RetentionPolicy.RUNTIME) @Target(ElementType.METHOD)
++public @interface JavascriptInterface {}
+diff --git a/browser/src/xwalkStub/java/org/xwalk/core/MyXWalkUpdater.java b/browser/src/xwalkStub/java/org/xwalk/core/MyXWalkUpdater.java
+new file mode 100644
+index 00000000..ca7c7a79
+--- /dev/null
++++ b/browser/src/xwalkStub/java/org/xwalk/core/MyXWalkUpdater.java
+@@ -0,0 +1,12 @@
++// STUB: Crosswalk 23.53.589.4 artifacts are no longer downloadable (download.01.org is gone).
++// No-op replacement so the project compiles. XWalk ("Alt") engine modes do NOT work in this build.
++package org.xwalk.core;
++
++import android.content.Context;
++public class MyXWalkUpdater {
++    public interface XWalkUpdateListener { void onXWalkUpdateCancelled(); }
++    private final XWalkUpdateListener l;
++    public MyXWalkUpdater(XWalkUpdateListener l, Context c) { this.l = l; }
++    public void setXWalkApkUrl(String u) {}
++    public boolean updateXWalkRuntime() { l.onXWalkUpdateCancelled(); return false; }
++}
+diff --git a/browser/src/xwalkStub/java/org/xwalk/core/XWalkCookieManager.java b/browser/src/xwalkStub/java/org/xwalk/core/XWalkCookieManager.java
+new file mode 100644
+index 00000000..8aa42ae7
+--- /dev/null
++++ b/browser/src/xwalkStub/java/org/xwalk/core/XWalkCookieManager.java
+@@ -0,0 +1,8 @@
++// STUB: Crosswalk 23.53.589.4 artifacts are no longer downloadable (download.01.org is gone).
++// No-op replacement so the project compiles. XWalk ("Alt") engine modes do NOT work in this build.
++package org.xwalk.core;
++
++public class XWalkCookieManager {
++    public void setCookie(String url, String v) {} public String getCookie(String url) { return null; }
++    public void setAcceptCookie(boolean a) {} public void removeAllCookie() {} public void flushCookieStore() {}
++}
+diff --git a/browser/src/xwalkStub/java/org/xwalk/core/XWalkInitializer.java b/browser/src/xwalkStub/java/org/xwalk/core/XWalkInitializer.java
+new file mode 100644
+index 00000000..7260673d
+--- /dev/null
++++ b/browser/src/xwalkStub/java/org/xwalk/core/XWalkInitializer.java
+@@ -0,0 +1,12 @@
++// STUB: Crosswalk 23.53.589.4 artifacts are no longer downloadable (download.01.org is gone).
++// No-op replacement so the project compiles. XWalk ("Alt") engine modes do NOT work in this build.
++package org.xwalk.core;
++
++import android.content.Context;
++public class XWalkInitializer {
++    public interface XWalkInitListener { void onXWalkInitStarted(); void onXWalkInitCancelled(); void onXWalkInitFailed(); void onXWalkInitCompleted(); }
++    private final XWalkInitListener l;
++    public XWalkInitializer(XWalkInitListener l, Context c) { this.l = l; }
++    public boolean initAsync() { l.onXWalkInitFailed(); return false; }
++    public boolean isXWalkReady() { return false; }
++}
+diff --git a/browser/src/xwalkStub/java/org/xwalk/core/XWalkPreferences.java b/browser/src/xwalkStub/java/org/xwalk/core/XWalkPreferences.java
+new file mode 100644
+index 00000000..83b9afff
+--- /dev/null
++++ b/browser/src/xwalkStub/java/org/xwalk/core/XWalkPreferences.java
+@@ -0,0 +1,8 @@
++// STUB: Crosswalk 23.53.589.4 artifacts are no longer downloadable (download.01.org is gone).
++// No-op replacement so the project compiles. XWalk ("Alt") engine modes do NOT work in this build.
++package org.xwalk.core;
++
++public class XWalkPreferences {
++    public static final String REMOTE_DEBUGGING = "remote-debugging", ANIMATABLE_XWALK_VIEW = "animatable-xwalk-view";
++    public static void setValue(String k, boolean v) {} public static void setValue(String k, int v) {} public static void setValue(String k, String v) {}
++}
+diff --git a/browser/src/xwalkStub/java/org/xwalk/core/XWalkResourceClient.java b/browser/src/xwalkStub/java/org/xwalk/core/XWalkResourceClient.java
+new file mode 100644
+index 00000000..56ae2cc0
+--- /dev/null
++++ b/browser/src/xwalkStub/java/org/xwalk/core/XWalkResourceClient.java
+@@ -0,0 +1,15 @@
++// STUB: Crosswalk 23.53.589.4 artifacts are no longer downloadable (download.01.org is gone).
++// No-op replacement so the project compiles. XWalk ("Alt") engine modes do NOT work in this build.
++package org.xwalk.core;
++
++import android.net.http.SslError; import android.webkit.ValueCallback; import android.webkit.WebResourceResponse;
++public class XWalkResourceClient {
++    public XWalkResourceClient(XWalkView v) {}
++    public void onReceivedSslError(XWalkView v, ValueCallback<Boolean> cb, SslError e) {}
++    public void onReceivedLoadError(XWalkView v, int code, String d, String url) {}
++    public void onLoadStarted(XWalkView v, String url) {} public void onLoadFinished(XWalkView v, String url) {}
++    public void onProgressChanged(XWalkView v, int p) {}
++    public WebResourceResponse shouldInterceptLoadRequest(XWalkView v, String url) { return null; }
++    public XWalkWebResourceResponse shouldInterceptLoadRequest(XWalkView v, XWalkWebResourceRequest r) { return null; }
++    public boolean shouldOverrideUrlLoading(XWalkView v, String url) { return false; }
++}
+diff --git a/browser/src/xwalkStub/java/org/xwalk/core/XWalkSettings.java b/browser/src/xwalkStub/java/org/xwalk/core/XWalkSettings.java
+new file mode 100644
+index 00000000..1d849278
+--- /dev/null
++++ b/browser/src/xwalkStub/java/org/xwalk/core/XWalkSettings.java
+@@ -0,0 +1,55 @@
++// STUB: Crosswalk 23.53.589.4 artifacts are no longer downloadable (download.01.org is gone).
++// No-op replacement so the project compiles. XWalk ("Alt") engine modes do NOT work in this build.
++package org.xwalk.core;
++
++public class XWalkSettings {
++    public enum LayoutAlgorithm { NORMAL, SINGLE_COLUMN, NARROW_COLUMNS, TEXT_AUTOSIZING }
++    public void setLayoutAlgorithm(LayoutAlgorithm a) {}
++    public LayoutAlgorithm getLayoutAlgorithm() { return LayoutAlgorithm.NORMAL; }
++    public boolean getAllowContentAccess() { return false; }
++    public boolean getAllowFileAccess() { return false; }
++    public boolean getAllowFileAccessFromFileURLs() { return false; }
++    public boolean getAllowUniversalAccessFromFileURLs() { return false; }
++    public boolean getBlockNetworkImage() { return false; }
++    public boolean getBlockNetworkLoads() { return false; }
++    public boolean getBuiltInZoomControls() { return false; }
++    public int getCacheMode() { return 0; }
++    public boolean getDatabaseEnabled() { return false; }
++    public int getDefaultFixedFontSize() { return 0; }
++    public int getDefaultFontSize() { return 0; }
++    public boolean getDomStorageEnabled() { return false; }
++    public boolean getJavaScriptCanOpenWindowsAutomatically() { return false; }
++    public boolean getJavaScriptEnabled() { return false; }
++    public boolean getLoadWithOverviewMode() { return false; }
++    public boolean getLoadsImagesAutomatically() { return false; }
++    public boolean getMediaPlaybackRequiresUserGesture() { return false; }
++    public boolean getSaveFormData() { return false; }
++    public int getTextZoom() { return 0; }
++    public boolean getUseWideViewPort() { return false; }
++    public String getUserAgentString() { return null; }
++    public void setAllowContentAccess(boolean v) {}
++    public void setAllowFileAccess(boolean v) {}
++    public void setAllowFileAccessFromFileURLs(boolean v) {}
++    public void setAllowUniversalAccessFromFileURLs(boolean v) {}
++    public void setBlockNetworkImage(boolean v) {}
++    public void setBlockNetworkLoads(boolean v) {}
++    public void setBuiltInZoomControls(boolean v) {}
++    public void setCacheMode(int v) {}
++    public void setDatabaseEnabled(boolean v) {}
++    public void setDefaultFixedFontSize(int v) {}
++    public void setDefaultFontSize(int v) {}
++    public void setDomStorageEnabled(boolean v) {}
++    public void setJavaScriptCanOpenWindowsAutomatically(boolean v) {}
++    public void setJavaScriptEnabled(boolean v) {}
++    public void setLoadWithOverviewMode(boolean v) {}
++    public void setLoadsImagesAutomatically(boolean v) {}
++    public void setMediaPlaybackRequiresUserGesture(boolean v) {}
++    public void setSaveFormData(boolean v) {}
++    public void setSupportMultipleWindows(boolean v) {}
++    public void setSupportZoom(boolean v) {}
++    public void setTextZoom(int v) {}
++    public void setUseWideViewPort(boolean v) {}
++    public void setUserAgentString(String v) {}
++    public boolean supportMultipleWindows() { return false; }
++    public boolean supportZoom() { return false; }
++}
+diff --git a/browser/src/xwalkStub/java/org/xwalk/core/XWalkUIClient.java b/browser/src/xwalkStub/java/org/xwalk/core/XWalkUIClient.java
+new file mode 100644
+index 00000000..f88523bd
+--- /dev/null
++++ b/browser/src/xwalkStub/java/org/xwalk/core/XWalkUIClient.java
+@@ -0,0 +1,9 @@
++// STUB: Crosswalk 23.53.589.4 artifacts are no longer downloadable (download.01.org is gone).
++// No-op replacement so the project compiles. XWalk ("Alt") engine modes do NOT work in this build.
++package org.xwalk.core;
++
++public class XWalkUIClient {
++    public enum ConsoleMessageType { DEBUG, ERROR, LOG, INFO, WARNING, TIP }
++    public XWalkUIClient(XWalkView v) {}
++    public boolean onConsoleMessage(XWalkView v, String m, int line, String src, ConsoleMessageType t) { return false; }
++}
+diff --git a/browser/src/xwalkStub/java/org/xwalk/core/XWalkView.java b/browser/src/xwalkStub/java/org/xwalk/core/XWalkView.java
+new file mode 100644
+index 00000000..57d08ca5
+--- /dev/null
++++ b/browser/src/xwalkStub/java/org/xwalk/core/XWalkView.java
+@@ -0,0 +1,25 @@
++// STUB: Crosswalk 23.53.589.4 artifacts are no longer downloadable (download.01.org is gone).
++// No-op replacement so the project compiles. XWalk ("Alt") engine modes do NOT work in this build.
++package org.xwalk.core;
++
++import android.content.Context; import android.os.Bundle; import android.util.AttributeSet; import android.webkit.ValueCallback; import android.widget.FrameLayout; import java.util.Map;
++public class XWalkView extends FrameLayout {
++    public static final int RELOAD_NORMAL = 0, RELOAD_IGNORE_CACHE = 1;
++    public XWalkView(Context c) { super(c); }
++    public XWalkView(Context c, AttributeSet a) { super(c, a); }
++    public void addJavascriptInterface(Object o, String n) {}
++    public void evaluateJavascript(String s, ValueCallback<String> cb) {}
++    public void setInitialScale(int p) {}
++    public void loadUrl(String u) {}
++    public void loadUrl(String u, Map<String, String> h) {}
++    public void load(String u, String content) {}
++    public void load(String u, String content, Map<String, String> h) {}
++    public void reload(int mode) {}
++    public void onHide() {} public void onShow() {} public void onDestroy() {}
++    public void pauseTimers() {} public void resumeTimers() {}
++    public void clearCache(boolean d) {}
++    public String getUrl() { return null; } public String getOriginalUrl() { return null; }
++    public XWalkSettings getSettings() { return new XWalkSettings(); }
++    public boolean saveState(Bundle b) { return false; } public boolean restoreState(Bundle b) { return false; }
++    public void setUIClient(XWalkUIClient c) {} public void setResourceClient(XWalkResourceClient c) {}
++}
+diff --git a/browser/src/xwalkStub/java/org/xwalk/core/XWalkWebResourceRequest.java b/browser/src/xwalkStub/java/org/xwalk/core/XWalkWebResourceRequest.java
+new file mode 100644
+index 00000000..cb474b1d
+--- /dev/null
++++ b/browser/src/xwalkStub/java/org/xwalk/core/XWalkWebResourceRequest.java
+@@ -0,0 +1,5 @@
++// STUB: Crosswalk 23.53.589.4 artifacts are no longer downloadable (download.01.org is gone).
++// No-op replacement so the project compiles. XWalk ("Alt") engine modes do NOT work in this build.
++package org.xwalk.core;
++
++public interface XWalkWebResourceRequest {}
+diff --git a/browser/src/xwalkStub/java/org/xwalk/core/XWalkWebResourceResponse.java b/browser/src/xwalkStub/java/org/xwalk/core/XWalkWebResourceResponse.java
+new file mode 100644
+index 00000000..f147acb1
+--- /dev/null
++++ b/browser/src/xwalkStub/java/org/xwalk/core/XWalkWebResourceResponse.java
+@@ -0,0 +1,5 @@
++// STUB: Crosswalk 23.53.589.4 artifacts are no longer downloadable (download.01.org is gone).
++// No-op replacement so the project compiles. XWalk ("Alt") engine modes do NOT work in this build.
++package org.xwalk.core;
++
++public class XWalkWebResourceResponse {}
+diff --git a/build.gradle b/build.gradle
+index 5c1f5410..1d8ef115 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -32,6 +32,9 @@ buildscript {
+ 
+ allprojects {
+     repositories {
++        // Artifacts that vanished with JCenter, rebuilt from source (see BUILD-NOTES.md)
++        maven { url "${rootDir}/localrepo" }
++
+         // browse: https://bintray.com/bintray/jcenter
+         jcenter()
+         google()
+diff --git a/common/src/main/java/com/liskovsoft/smartyoutubetv/misc/LangUpdater.java b/common/src/main/java/com/liskovsoft/smartyoutubetv/misc/LangUpdater.java
+index 42fc9d3c..4dd016a5 100644
+--- a/common/src/main/java/com/liskovsoft/smartyoutubetv/misc/LangUpdater.java
++++ b/common/src/main/java/com/liskovsoft/smartyoutubetv/misc/LangUpdater.java
+@@ -1,7 +1,7 @@
+ package com.liskovsoft.smartyoutubetv.misc;
+ 
+ import android.content.Context;
+-import com.liskovsoft.sharedutils.locale.LangHelper;
++import com.liskovsoft.sharedutils.locale.LocaleUpdaterHelper;
+ import com.liskovsoft.sharedutils.mylogger.Log;
+ import com.liskovsoft.smartyoutubetv.common.R;
+ import com.liskovsoft.smartyoutubetv.prefs.SmartPreferences;
+@@ -23,11 +23,11 @@ public class LangUpdater {
+ 
+         Log.d(TAG, "Updating locale to " + locale);
+ 
+-        LangHelper.forceLocale(mContext, locale);
++        LocaleUpdaterHelper.forceLocale(mContext, locale);
+     }
+ 
+     public String getUpdatedLocale() {
+-        String locale = LangHelper.guessLocale(mContext);
++        String locale = LocaleUpdaterHelper.guessLocale(mContext);
+ 
+         String langCode = getPreferredLocale();
+ 
+@@ -56,7 +56,7 @@ public class LangUpdater {
+         String locale = getPreferredLocale();
+ 
+         if (locale == null || locale.isEmpty()) {
+-            locale = LangHelper.getDefaultLocale();
++            locale = LocaleUpdaterHelper.getDefaultLocale();
+         }
+ 
+         return locale.replace("_", "-").toLowerCase();
+diff --git a/smartyoutubetv/src/main/java/com/liskovsoft/smartyoutubetv/flavors/common/FragmentManagerActivity.java b/smartyoutubetv/src/main/java/com/liskovsoft/smartyoutubetv/flavors/common/FragmentManagerActivity.java
+index 130e0eeb..e35324bf 100644
+--- a/smartyoutubetv/src/main/java/com/liskovsoft/smartyoutubetv/flavors/common/FragmentManagerActivity.java
++++ b/smartyoutubetv/src/main/java/com/liskovsoft/smartyoutubetv/flavors/common/FragmentManagerActivity.java
+@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
+ import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
+ import com.liskovsoft.sharedutils.helpers.Helpers;
+ import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
+-import com.liskovsoft.sharedutils.locale.LangHelper;
++import com.liskovsoft.sharedutils.locale.LocaleUpdaterHelper;
+ import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
+ import com.liskovsoft.sharedutils.mylogger.Log;
+ import com.liskovsoft.smartyoutubetv.CommonApplication;
+@@ -439,7 +439,7 @@ public abstract class FragmentManagerActivity extends CrashHandlerActivity imple
+     @Override
+     protected void attachBaseContext(Context newBase) {
+         String langCode = new LangUpdater(newBase).getUpdatedLocale();
+-        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode)));
++        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LocaleUpdaterHelper.parseLangCode(langCode)));
+     }
+ 
+     protected void onMemoryCritical() {}
