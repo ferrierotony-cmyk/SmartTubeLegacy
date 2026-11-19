@@ -1,7 +1,7 @@
 package com.liskovsoft.smartyoutubetv.misc;
 
 import android.content.Context;
-import com.liskovsoft.sharedutils.locale.LangHelper;
+import com.liskovsoft.sharedutils.locale.LocaleUpdaterHelper;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv.common.R;
 import com.liskovsoft.smartyoutubetv.prefs.SmartPreferences;
@@ -23,11 +23,11 @@ public class LangUpdater {
 
         Log.d(TAG, "Updating locale to " + locale);
 
-        LangHelper.forceLocale(mContext, locale);
+        LocaleUpdaterHelper.forceLocale(mContext, locale);
     }
 
     public String getUpdatedLocale() {
-        String locale = LangHelper.guessLocale(mContext);
+        String locale = LocaleUpdaterHelper.guessLocale(mContext);
 
         String langCode = getPreferredLocale();
 
@@ -56,7 +56,7 @@ public class LangUpdater {
         String locale = getPreferredLocale();
 
         if (locale == null || locale.isEmpty()) {
-            locale = LangHelper.getDefaultLocale();
+            locale = LocaleUpdaterHelper.getDefaultLocale();
         }
 
         return locale.replace("_", "-").toLowerCase();

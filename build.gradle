@@ -32,6 +32,9 @@ buildscript {
 
 allprojects {
     repositories {
+        // Artifacts that vanished with JCenter, rebuilt from source (see BUILD-NOTES.md)
+        maven { url "${rootDir}/localrepo" }
+
         // browse: https://bintray.com/bintray/jcenter
         jcenter()
         google()

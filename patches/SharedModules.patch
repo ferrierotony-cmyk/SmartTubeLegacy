@@ -1,0 +1,48 @@
+diff --git a/constants.gradle b/constants.gradle
+index 27a9704..bca5edc 100644
+--- a/constants.gradle
++++ b/constants.gradle
+@@ -33,7 +33,7 @@ project.ext {
+     exoplayerVersion = '2.12.3'
+     // amazonExoplayerVersion = '2.10.6' // Old
+     // amazonExoplayerVersion = '2.13.3' // New
+-    amazonExoplayerVersion = '2.10.6'
++    amazonExoplayerVersion = '2.10.6' // built from source into ./localrepo (JCenter is dead)
+     amazonExoplayerJitpackVersion = 'amazon~r2.12.1-SNAPSHOT'
+     
+     espressoVersion = '3.2.0'
+@@ -70,7 +70,7 @@ project.ext {
+     previewSeekBarExoDevVersion = '5e04501dfce1fe9de61f519fef2278aa751fe8ab'
+     asmVersion = '5.0.4'
+     nanoHttpdVersion = '2.3.1'
+-    voiceOverlayVersion = '1.0.0-beta02' // https://github.com/algolia/voice-overlay-android
++    voiceOverlayVersion = '1.1.0' // https://github.com/algolia/voice-overlay-android
+     apacheCommonsLangVersion = '3.10'
+     firebaseCrashlyticsVersion = '17.2.1'
+     
+diff --git a/sharedutils/build.gradle b/sharedutils/build.gradle
+index 536efee..78bbd4e 100644
+--- a/sharedutils/build.gradle
++++ b/sharedutils/build.gradle
+@@ -47,7 +47,7 @@ dependencies {
+     implementation 'androidx.appcompat:appcompat:' + appCompatXLibraryVersion
+ 
+     implementation 'com.squareup.okhttp3:okhttp:' + okhttpVersion
+-    implementation 'com.itkacher.okhttpprofiler:okhttpprofiler:' + okhttpProfilerVersion
++    implementation 'com.github.itkacher:OkHttpProfiler:' + okhttpProfilerVersion // was com.itkacher.okhttpprofiler (dead JCenter)
+ 
+     implementation 'com.google.code.gson:gson:' + gsonVersion
+ 
+diff --git a/sharedutils/src/main/java/com/liskovsoft/sharedutils/locale/LocaleUpdaterHelper.java b/sharedutils/src/main/java/com/liskovsoft/sharedutils/locale/LocaleUpdaterHelper.java
+index fb09ef2..9eba69f 100644
+--- a/sharedutils/src/main/java/com/liskovsoft/sharedutils/locale/LocaleUpdaterHelper.java
++++ b/sharedutils/src/main/java/com/liskovsoft/sharedutils/locale/LocaleUpdaterHelper.java
+@@ -11,7 +11,7 @@ import com.liskovsoft.sharedutils.helpers.Helpers;
+ import java.util.Locale;
+ import java.util.StringTokenizer;
+ 
+-class LocaleUpdaterHelper {
++public class LocaleUpdaterHelper {
+     private static final String LOCALE_EN_US = "en_US";
+     private static final String LOCALE_RU = "ru_RU";
+     private final static String[] rusPackages = {"dkc.androidtv.tree", "dkc.video.fsbox", "dkc.video.hdbox", "dkc.video.uatv"};

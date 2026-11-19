@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import com.liskovsoft.sharedutils.helpers.AppInfoHelpers;
 import com.liskovsoft.sharedutils.helpers.Helpers;
 import com.liskovsoft.sharedutils.helpers.PermissionHelpers;
-import com.liskovsoft.sharedutils.locale.LangHelper;
+import com.liskovsoft.sharedutils.locale.LocaleUpdaterHelper;
 import com.liskovsoft.sharedutils.locale.LocaleContextWrapper;
 import com.liskovsoft.sharedutils.mylogger.Log;
 import com.liskovsoft.smartyoutubetv.CommonApplication;
@@ -439,7 +439,7 @@ public abstract class FragmentManagerActivity extends CrashHandlerActivity imple
     @Override
     protected void attachBaseContext(Context newBase) {
         String langCode = new LangUpdater(newBase).getUpdatedLocale();
-        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LangHelper.parseLangCode(langCode)));
+        super.attachBaseContext(LocaleContextWrapper.wrap(newBase, LocaleUpdaterHelper.parseLangCode(langCode)));
     }
 
     protected void onMemoryCritical() {}
