@@ -14,7 +14,7 @@ gone, and the git submodule pins have drifted away from the parent code. These a
 | `sharedutils.locale.LangHelper` missing at the pinned SharedModules commit (renamed upstream) | Switched to `LocaleUpdaterHelper` (same API) and made it `public`. |
 | ExoPlayer repo needs dead `com.novoda:bintray-release` plugin | Removed; publishing was disabled anyway. |
 
-All source changes are in `patches/` (one per repo/submodule, including the ExoPlayer clone).
+Submodule fixes live in forks of the submodules (see Reproduce). `patches/` keeps the main-repo diff and the ExoPlayer build patch for reference.
 
 ## What does NOT work in this build
 
@@ -27,19 +27,20 @@ All source changes are in `patches/` (one per repo/submodule, including the ExoP
 Requirements: JDK 8, Android SDK (`platforms;android-28`, `build-tools;28.0.3`), network access to
 `dl.google.com`, `maven.google.com`, `jitpack.io`, Maven Central and `services.gradle.org`.
 
-From this fork (the main-repo fixes are already merged, so only the submodule patches are needed):
+The submodules point at forks that already contain the fixes
+(`ferrierotony-cmyk/SharedModules` and `ferrierotony-cmyk/MediaServiceCore`, branch `build-fixes-2026`),
+so there is no patching step:
 
 ```bash
 git clone --recurse-submodules https://github.com/ferrierotony-cmyk/SmartTubeLegacy.git && cd SmartTubeLegacy
-git -C SharedModules apply ../patches/SharedModules.patch
-git -C MediaServiceCore apply ../patches/MediaServiceCore.patch
-git -C MediaServiceCore/SharedModules apply ../../patches/MediaServiceCore-SharedModules.patch
 echo "sdk.dir=$ANDROID_HOME" > local.properties
 JAVA_HOME=/path/to/jdk8 bash ./gradlew :smartyoutubetv:assembleOrigDebug
 ```
 
-From yuliskov's original repo instead, also run `git apply patches/SmartTubeLegacy.patch` (after copying `patches/`
-and `localrepo/` over from this fork) before the submodule patches.
+**Don't delete the `build-fixes-2026` branches in the two submodule forks.** The submodule pointers lock to exact
+commits on those branches, and if a branch goes, GitHub can garbage-collect its commits and every clone breaks.
+
+`patches/SmartTubeLegacy.patch` is the main-repo diff against yuliskov's original, kept for reference.
 
 Install: `adb install SYTV_Orig_v6.17.739_d.apk`
 
@@ -47,7 +48,7 @@ Install: `adb install SYTV_Orig_v6.17.739_d.apk`
 
 | Test | Result |
 |---|---|
-| Fresh clone of this fork + the steps above | **Pass.** APK builds. |
+| Fresh clone of this fork + the steps above | **Pass.** APK builds with no manual patching. |
 | Unit tests (`testOrigDebugUnitTest`, `sharedutils`, `common`, `youtubeapi`) | **Fail, all suites.** Every test dies inside Robolectric 4.3.1's own setup (`Configuration.getLocales not mocked`) before any test code runs, including in modules these fixes barely touch. That's the old test harness, not the app. Many tests also hit live 2021-era YouTube APIs. |
 | Install + launch on an Android 7.1 x86 emulator | **Pass.** Installs, launches into "1080 Main" (WebView) mode, shows the first-run consent dialog, accepts D-pad (TV remote) input, no crashes. |
 | Actual YouTube playback | **Not tested.** The test emulator had no internet access. Unverified on real hardware. |
